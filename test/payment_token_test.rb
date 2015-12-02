@@ -7,8 +7,8 @@ class Android_Pay::PaymentTokenTest < Test::Unit::TestCase
 
   def setup
     fixtures = File.dirname(__FILE__) + "/fixtures/"
-    @token_attrs = JSON.parse(File.read(fixtures + "test_data_token.json"))
-    @private_key = File.read(fixtures + "test_data_private_key.pem")
+    @token_attrs = JSON.parse(File.read(fixtures + "token.json"))
+    @private_key = File.read(fixtures + "private_key.pem")
     @payment_token = Android_Pay::PaymentToken.new(@token_attrs)
   end
 
@@ -21,9 +21,10 @@ class Android_Pay::PaymentTokenTest < Test::Unit::TestCase
 
 
   def test_decrypt
-    payment_data = @payment_token.decrypt(@token_attrs["ephemeralPublicKey"], @private_key)
-    assert_equal "plaintext", payment_data
-    # payment_data = JSON.parse(@payment_token.decrypt(@token_attrs["ephemeralPublicKey"], @private_key))
+    # payment_data = @payment_token.decrypt(@token_attrs["ephemeralPublicKey"], @private_key)
+    # assert_equal "plaintext", payment_data
+    payment_data = JSON.parse(@payment_token.decrypt(@token_attrs["ephemeralPublicKey"], @private_key))
+    puts payment_data
     # assert_equal "4109370251004320", payment_data["applicationPrimaryAccountNumber"]
     # assert_equal "200731", payment_data["applicationExpirationDate"]
     # assert_equal "840", payment_data["currencyCode"]
