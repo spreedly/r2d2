@@ -1,0 +1,27 @@
+/Users/mrezentes/.rbenv/versions/2.1.5/bin/ruby -r ./siteconf20151123-63830-1r5ja5p.rb extconf.rb
+checking for openssl/ssl.h... yes
+checking for SSLv23_method() in -lssl... yes
+creating Makefile
+
+make "DESTDIR=" clean
+
+make "DESTDIR="
+compiling aead.c
+aead.c:74:12: warning: assigning to 'char *' from 'unsigned char *' converts between pointers to integer types with different sign [-Wpointer-sign]
+    in     = (unsigned char *) RSTRING_PTR(data);
+           ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+aead.c:79:48: warning: passing 'char *' to parameter of type 'const unsigned char *' converts between pointers to integer types with different sign [-Wpointer-sign]
+    if (!EVP_CipherUpdate(ctx, NULL, &out_len, in, in_len))
+                                               ^~
+/usr/local/opt/openssl/include/openssl/evp.h:647:43: note: passing argument to parameter 'in' here
+                     const unsigned char *in, int inl);
+                                          ^
+aead.c:114:12: warning: assigning to 'char *' from 'unsigned char *' converts between pointers to integer types with different sign [-Wpointer-sign]
+    in     = (unsigned char *) RSTRING_PTR(data);
+           ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+3 warnings generated.
+linking shared-object openssl/cipher/aead.bundle
+
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 aead.bundle ./.gem.20151123-63830-1kun9wf/openssl/cipher
+installing default aead libraries
