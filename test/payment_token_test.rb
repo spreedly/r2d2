@@ -28,6 +28,9 @@ class Android_Pay::PaymentTokenTest < Test::Unit::TestCase
     assert_equal "3DS", payment_data["authMethod"]
     assert_equal "AgAAAAAABk4DWZ4C28yUQAAAAAA=", payment_data["3dsCryptogram"]
     assert_equal "07", payment_data["3dsEciIndicator"]
+    @payment_token.tag = "SomethingBogus"
+    invalid_payment_data = JSON.parse(@payment_token.decrypt( @private_key))
+    assert_equal "Tag is invalid", invalid_payment_data["error"]
   end
 
   def test_shared_secret

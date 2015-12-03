@@ -27,11 +27,10 @@ module Android_Pay
 
       verify_mac = OpenSSL::HMAC.digest(digest, mac_key, data)
       unless verify_mac == tag
-        puts "Invalid TAG, need to handle error"
+        error = {:error => "Tag is invalid"}
+        return JSON.generate(error)
       end
-      #TODO: handle the error if the tag is wrong
 
-      # Return JSON string, up to caller to parse
       self.class.decrypt(data, symmetricEncryptionKey)
     end
 
