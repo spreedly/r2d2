@@ -16,9 +16,9 @@ class R2D2::PaymentTokenTest < Test::Unit::TestCase
   end
 
   def test_initialize
-    assert_equal Base64.decode64(@token_attrs["ephemeralPublicKey"]), @payment_token.ephemeral_public_key
-    assert_equal Base64.decode64(@token_attrs["tag"]), @payment_token.tag
-    assert_equal Base64.decode64(@token_attrs["data"]), @payment_token.data
+    assert_equal @token_attrs["ephemeralPublicKey"], @payment_token.ephemeral_public_key
+    assert_equal @token_attrs["tag"], @payment_token.tag
+    assert_equal @token_attrs["data"], @payment_token.data
   end
 
   def test_successful_decrypt
@@ -27,8 +27,8 @@ class R2D2::PaymentTokenTest < Test::Unit::TestCase
     assert_equal 12, payment_data["expirationMonth"]
     assert_equal 2020, payment_data["expirationYear"]
     assert_equal "3DS", payment_data["authMethod"]
-    assert_equal "AgAAAAAABk4DWZ4C28yUQAAAAAA=", payment_data["cryptogram"]
-    assert_equal "07", payment_data["eciIndicator"]
+    assert_equal "AgAAAAAABk4DWZ4C28yUQAAAAAA=", payment_data["3dsCryptogram"]
+    assert_equal "07", payment_data["3dsEciIndicator"]
   end
 
   def test_shared_secret
