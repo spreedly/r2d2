@@ -1,6 +1,6 @@
-# Android_Pay
+# R2D2
 
-Android_Pay is a Ruby library for decrypting Android Pay payment tokens.
+R2D2 is a Ruby library for decrypting Android Pay payment tokens.
 
 ## Install
 
@@ -14,7 +14,7 @@ gem "android_pay", git: "https://github.com/spreedly/android_pay.git"
 
 AndroidPay works by:
 
-1. Initializing an instance of `Android_Pay::PaymentToken` with the hash of values present in the Android Pay token string. Example:
+1. Initializing an instance of `R2D2::PaymentToken` with the hash of values present in the Android Pay token string. Example:
 
 ```
 {
@@ -35,7 +35,7 @@ require "android_pay"
 
 # token_json = raw token string you get from Android Pay
 token_attrs = JSON.parse(token_json)
-token = Android_Pay::PaymentToken.new(token_attrs)
+token = R2D2::PaymentToken.new(token_attrs)
 
 private_key_pem = File.read("private_key.pem")
 

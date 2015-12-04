@@ -1,2 +1,4 @@
 .ruby-version
 vendor/*
+.bundle
+notes.md
