@@ -5,14 +5,14 @@ require 'hkdf'
 module R2D2
   class PaymentToken
 
-    attr_accessor :data, :ephemeral_public_key, :tag
+    attr_accessor :encrypted_message, :ephemeral_public_key, :tag
 
     class TagVerificationError < StandardError; end;
 
     def initialize(token_attrs)
       self.ephemeral_public_key = token_attrs["ephemeralPublicKey"]
       self.tag = token_attrs["tag"]
-      self.data = token_attrs["data"]
+      self.encrypted_message = token_attrs["encryptedMessage"]
     end
 
     def decrypt(private_key_pem)
@@ -25,9 +25,9 @@ module R2D2
       hkdf_keys = self.class.derive_hkdf_keys(ephemeral_public_key, shared_secret);
 
       # verify the tag is a valid value
-      self.class.verify_mac(digest, hkdf_keys[:mac_key], data, tag)
+      self.class.verify_mac(digest, hkdf_keys[:mac_key], encrypted_message, tag)
 
-      self.class.decrypt_message(data, hkdf_keys[:symmetric_encryption_key])
+      self.class.decrypt_message(encrypted_message, hkdf_keys[:symmetric_encryption_key])
     end
 
     class << self
@@ -48,8 +48,8 @@ module R2D2
         }
       end
 
-      def verify_mac(digest, mac_key, data, tag)
-        mac = OpenSSL::HMAC.digest(digest, mac_key, Base64.decode64(data))
+      def verify_mac(digest, mac_key, encrypted_message, tag)
+        mac = OpenSSL::HMAC.digest(digest, mac_key, Base64.decode64(encrypted_message))
         raise TagVerificationError unless mac == Base64.decode64(tag)
       end
 

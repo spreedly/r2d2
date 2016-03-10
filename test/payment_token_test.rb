@@ -18,7 +18,7 @@ class R2D2::PaymentTokenTest < Test::Unit::TestCase
   def test_initialize
     assert_equal @token_attrs["ephemeralPublicKey"], @payment_token.ephemeral_public_key
     assert_equal @token_attrs["tag"], @payment_token.tag
-    assert_equal @token_attrs["data"], @payment_token.data
+    assert_equal @token_attrs["encryptedMessage"], @payment_token.encrypted_message
   end
 
   def test_successful_decrypt
