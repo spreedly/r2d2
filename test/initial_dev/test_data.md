@@ -8,7 +8,7 @@ Note: for the HDFK step, the keying material is the ephemeral public key + the s
 ```
 {
 "ephemeralPublicKey":"BPhVspn70Zj2Kkgu9t8+ApEuUWsI/zos5whGCQBlgOkuYagOis7qsrcbQrcprjvTZO3XOU+Qbcc28FSgsRtcgQE=",
-"data":"PHxZxBQvVWwP",
+"encryptedMessage":"PHxZxBQvVWwP",
 "tag":"s9wa3Q2WiyGi/eDA4XYVklq08KZiSxB7xvRiKK3H7kE="
 }
 ```

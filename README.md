@@ -27,7 +27,7 @@ and the merchant's private key private key (which is managed by a third-party su
 ```ruby
 require "android_pay"
 
-# token_json = raw token string you get from Android Pay
+# token_json = raw token string you get from Android Pay { "encryptedMessage": "...", "tag": "...", ...}
 token_attrs = JSON.parse(token_json)
 token = R2D2::PaymentToken.new(token_attrs)
 
@@ -49,8 +49,11 @@ JSON.parse(decrypted_json)
 ## Testing
 
 ```session
-$ ruby test/payment_token_test.rb
+$ bundle exec ruby test/payment_token_test.rb
 ...
 5 tests, 18 assertions, 0 failures, 0 errors, 0 skips
 ```
 
+## Contributors
+
+* [methodmissing](https://github.com/methodmissing)
