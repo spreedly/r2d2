@@ -46,6 +46,31 @@ JSON.parse(decrypted_json)
 }
 ```
 
+### Performance
+
+The library implements a constant time comparison algorithm for preventing timing attacks. The default pure ruby implementation is quite inefficient, but portable. If performance is a priority for you, you can use a faster comparison algorithm provided by the [fast_secure_compare](https://github.com/daxtens/fast_secure_compare).
+
+To enable `FastSecureCompare` in your environment, add the following to your Gemfile:
+
+```ruby
+gem 'fast_secure_compare`
+```
+
+and require the extension in your application prior to loading r2d2:
+
+```ruby
+require 'fast_secure_compare/fast_secure_compare'
+require 'r2d2/payment_token'
+```
+
+Benchmarks illustrating the overhead of the pure Ruby version:
+
+```
+                          user     system      total        real
+secure_compare        1.070000   0.010000   1.080000 (  1.231714)
+fast secure_compare   0.050000   0.000000   0.050000 (  0.049753)
+```
+
 ## Testing
 
 ```session
