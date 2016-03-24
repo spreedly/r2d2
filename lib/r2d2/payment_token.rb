@@ -62,15 +62,21 @@ module R2D2
         payload.unpack('U*').collect { |el| el.chr }.join
       end
 
-      # constant-time comparison algorithm to prevent timing attacks; borrowed from ActiveSupport::MessageVerifier
-      def secure_compare(a, b)
-        return false unless a.bytesize == b.bytesize
+      if defined?(FastSecureCompare)
+        def secure_compare(a, b)
+          FastSecureCompare.compare(a, b)
+        end
+      else
+        # constant-time comparison algorithm to prevent timing attacks; borrowed from ActiveSupport::MessageVerifier
+        def secure_compare(a, b)
+          return false unless a.bytesize == b.bytesize
 
-        l = a.unpack("C#{a.bytesize}")
+          l = a.unpack("C#{a.bytesize}")
 
-        res = 0
-        b.each_byte { |byte| res |= byte ^ l.shift }
-        res == 0
+          res = 0
+          b.each_byte { |byte| res |= byte ^ l.shift }
+          res == 0
+        end
       end
     end
   end
