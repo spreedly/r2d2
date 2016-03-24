@@ -50,7 +50,7 @@ module R2D2
 
       def verify_mac(digest, mac_key, encrypted_message, tag)
         mac = OpenSSL::HMAC.digest(digest, mac_key, Base64.decode64(encrypted_message))
-        raise TagVerificationError unless mac == Base64.decode64(tag)
+        raise TagVerificationError unless secure_compare(mac, Base64.decode64(tag))
       end
 
       def decrypt_message(encrypted_data, symmetric_key)
@@ -62,6 +62,22 @@ module R2D2
         payload.unpack('U*').collect { |el| el.chr }.join
       end
 
+      if defined?(FastSecureCompare)
+        def secure_compare(a, b)
+          FastSecureCompare.compare(a, b)
+        end
+      else
+        # constant-time comparison algorithm to prevent timing attacks; borrowed from ActiveSupport::MessageVerifier
+        def secure_compare(a, b)
+          return false unless a.bytesize == b.bytesize
+
+          l = a.unpack("C#{a.bytesize}")
+
+          res = 0
+          b.each_byte { |byte| res |= byte ^ l.shift }
+          res == 0
+        end
+      end
     end
   end
 end
