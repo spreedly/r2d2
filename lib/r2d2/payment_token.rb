@@ -27,7 +27,8 @@ module R2D2
       # verify the tag is a valid value
       self.class.verify_mac(digest, hkdf_keys[:mac_key], encrypted_message, tag)
 
-      self.class.decrypt_message(encrypted_message, hkdf_keys[:symmetric_encryption_key])
+      message = self.class.decrypt_message(encrypted_message, hkdf_keys[:symmetric_encryption_key])
+      JSON.parse(message)
     end
 
     class << self
