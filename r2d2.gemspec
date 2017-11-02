@@ -19,4 +19,9 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 1.8.7"
 
   s.add_runtime_dependency 'hkdf'
+
+  s.add_development_dependency "bundler", "~> 1.15"
+  s.add_development_dependency "rake", "~> 12.0"
+  s.add_development_dependency "minitest", "~> 5.0"
+  s.add_development_dependency "pry-byebug"
 end
