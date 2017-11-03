@@ -40,9 +40,9 @@ module R2D2
         private_key.dh_compute_key(point)
       end
 
-      def derive_hkdf_keys(ephemeral_public_key, shared_secret)
-        key_material = Base64.decode64(ephemeral_public_key) + shared_secret;
-        hkdf = HKDF.new(key_material, :algorithm => 'SHA256', :info => 'Android')
+      def derive_hkdf_keys(ephemeral_public_key, shared_secret, info = 'Android')
+        key_material = Base64.decode64(ephemeral_public_key) + shared_secret
+        hkdf = HKDF.new(key_material, :algorithm => 'SHA256', :info => info)
         {
           :symmetric_encryption_key => hkdf.next_bytes(16),
           :mac_key => hkdf.next_bytes(16)

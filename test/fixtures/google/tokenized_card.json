@@ -1,0 +1,5 @@
+{
+  "signature": "MEUCIQDzgQkY/Lj42FoZC9wN44Uz0r6uDttc68k2c9oZCzNJPwIgSRukEx30uMjqzFswekoarAtO9p1/E221hNmVuHzDW+M\u003d",
+  "protocolVersion": "ECv1",
+  "signedMessage": "{\"encryptedMessage\":\"RrliMMApO0MghHfjfVbJDz3jmdwQYluu8yjLPqnsRUZ36s28ceb+KxEdFIaxC2Y/d6hUm7kUOpyLbCMlj0IZXUP7WmGxHW+oQr8BDiHmwlRzovO3WCyB91kci0dz17k5qKaT/6Pf3FMu+0IhiGd+QtD6d+ifv6bvy6iA0rwpGMHheC/gKqZF4xCYWJjw7Twa72xEbjp9qlO0msA8jysjuB+N2injsL43I/lB592I/V9VZJvI5S7TDZi8XQb1kNKNmhH1XDEseT3Mb180xtJxCxuVOpk9yH7NyRWha3HV6Tgr+GqSSk5jCzZyY/PxxwTjnRvRPmcrd7PTN+w1k4M4TdniyStmdk8yUdxgd+utNB3Xwh4J8caFtDVZdRYgoDx5S/3zJ6xQckqQzVD0fRuykVtMjY++EMbNfNdGKV0u8mAEBVXJaPVsxISCgBJTvpNzllj3DMvNEE/Zc5p+7izMh8mz++g5ab5mrw/Xg//dYm/ndKG6V9WXqosTg4IdhsWALgCLyYVZwxjsjF3kua0XZ2IyemsvGU0KtZL9Uy4\\u003d\",\"ephemeralPublicKey\":\"BCVPKilVgN/Mg7cg4nkLZnvMZ0EIONH+Cnlq6ykhWk/lq+fHHgH+lOoy0MXvI7ZfDL6AesSO8+mqLl4MwwHDd6o\\u003d\",\"tag\":\"P/m+wFoQ7yQHepwhGdGvp08TSPPuO1a5SyF9C5QKIe4\\u003d\"}"
+}
