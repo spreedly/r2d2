@@ -6,26 +6,27 @@ class R2D2::GooglePaymentTokenTest < Minitest::Test
     @fixtures = File.dirname(__FILE__) + "/fixtures/google/"
     @tokenized_card = JSON.parse(File.read(@fixtures + "tokenized_card.json"))
     @private_key = File.read(@fixtures + "private_key.pem")
-    @payment_token = R2D2::GooglePaymentToken.new(@tokenized_card)
   end
 
   def test_initialize
     signed_attrs = JSON.parse(@tokenized_card['signedMessage'])
-    assert_equal signed_attrs["ephemeralPublicKey"], @payment_token.ephemeral_public_key
-    assert_equal signed_attrs["tag"], @payment_token.tag
-    assert_equal signed_attrs["encryptedMessage"], @payment_token.encrypted_message
+    token = payment_token
+
+    assert_equal signed_attrs["ephemeralPublicKey"], token.ephemeral_public_key
+    assert_equal signed_attrs["tag"], token.tag
+    assert_equal signed_attrs["encryptedMessage"], token.encrypted_message
   end
 
   def test_initialize_unknown_protocol_version
     @tokenized_card['protocolVersion'] = 'foo'
 
     assert_raises ArgumentError, 'unknown protocolVersion foo' do
-      R2D2::GooglePaymentToken.new(@tokenized_card)
+      payment_token
     end
   end
 
   def test_payment_details_from_decrypted_data
-    decrypted_attrs = @payment_token.decrypt(@private_key)
+    decrypted_attrs = payment_token.decrypt(@private_key)
 
     assert_equal "4895370012003478", decrypted_attrs["dpan"]
     assert_equal 12, decrypted_attrs["expirationMonth"]
@@ -36,11 +37,16 @@ class R2D2::GooglePaymentTokenTest < Minitest::Test
   end
 
   def test_unsupported_payment_method
-    @card = JSON.parse(File.read(@fixtures + "card.json"))
-    @payment_token = R2D2::GooglePaymentToken.new(@card)
+    @tokenized_card = JSON.parse(File.read(@fixtures + "card.json"))
 
     assert_raises ArgumentError, 'unknown paymentMethod CARD' do
-      @payment_token.decrypt(@private_key)
+      payment_token.decrypt(@private_key)
     end
+  end
+
+  private
+
+  def payment_token
+    R2D2::GooglePaymentToken.new(@tokenized_card)
   end
 end
