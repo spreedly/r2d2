@@ -26,9 +26,7 @@ module R2D2
       expired = message['messageExpiration'].to_f / 1000.0 <= Time.now.to_f
       raise MessageExpiredError if expired
 
-      payment_method = message['paymentMethod']
-      raise ArgumentError, "unknown paymentMethod #{payment_method}" unless payment_method == 'TOKENIZED_CARD'
-      message['paymentMethodDetails']
+      message
     end
 
     private
