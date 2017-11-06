@@ -8,6 +8,11 @@ class R2D2::GooglePaymentTokenTest < Minitest::Test
     @tokenized_card = JSON.parse(File.read(@fixtures + "tokenized_card.json"))
     @private_key = File.read(@fixtures + "private_key.pem")
     @verification_keys = JSON.parse(File.read(@fixtures + "google_verification_key_test.json"))
+    Timecop.freeze(Time.at(1509713963))
+  end
+
+  def teardown
+    Timecop.return
   end
 
   def test_initialize_unknown_protocol_version
@@ -63,6 +68,14 @@ class R2D2::GooglePaymentTokenTest < Minitest::Test
     @verification_keys = { 'keys' => production_keys + @verification_keys['keys'] }
 
     assert payment_token.decrypt(@private_key)
+  end
+
+  def test_expired_message
+    Timecop.freeze(Time.at(1510318760)) do
+      assert_raises R2D2::GooglePaymentToken::MessageExpiredError do
+        payment_token.decrypt(@private_key)
+      end
+    end
   end
 
   def test_unsupported_payment_method
