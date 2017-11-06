@@ -7,7 +7,8 @@ module R2D2
 
     attr_accessor :encrypted_message, :ephemeral_public_key, :tag
 
-    class TagVerificationError < StandardError; end;
+    Error = Class.new(StandardError)
+    TagVerificationError = Class.new(PaymentToken::Error)
 
     def initialize(token_attrs)
       self.ephemeral_public_key = token_attrs["ephemeralPublicKey"]
