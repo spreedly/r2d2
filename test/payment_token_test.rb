@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "test_helper"
 
 class R2D2::PaymentTokenTest < Minitest::Test
