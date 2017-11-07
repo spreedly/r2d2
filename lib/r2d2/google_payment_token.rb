@@ -7,6 +7,15 @@ module R2D2
 
     attr_reader :protocol_version, :merchant_id, :verification_keys, :signature, :signed_message
 
+    def self.to_length_value(*chunks)
+      chunks.flat_map do |chunk|
+        chunk_size = 4.times.map do |index|
+          (chunk.bytesize >> (8 * index)) & 0xFF
+        end
+        chunk_size.pack('C*') + chunk
+      end.join
+    end
+
     def initialize(token_attrs, merchant_id:, verification_keys:)
       @protocol_version = token_attrs['protocolVersion']
       raise ArgumentError, "unknown protocolVersion #{protocol_version}" unless protocol_version == 'ECv1'
@@ -52,18 +61,6 @@ module R2D2
         JSON.parse(signed_message)
       else
         raise SignatureInvalidError
-      end
-    end
-
-    class << self
-      def to_length_value(*chunks)
-        chunks.flat_map do |chunk|
-          chunk_size = 4.times.map do |index|
-            (chunk.bytesize >> (8 * index)) & 0xFF
-          end
-          bytes = chunk_size + chunk.unpack('C*')
-          bytes.pack('C*')
-        end.join
       end
     end
   end
