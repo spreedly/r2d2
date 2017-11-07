@@ -3,6 +3,8 @@ module R2D2
     SignatureInvalidError = Class.new(PaymentToken::Error)
     MessageExpiredError = Class.new(PaymentToken::Error)
 
+    HKDF_INFO = 'Google'
+
     attr_reader :protocol_version, :merchant_id, :verification_keys, :signature, :signed_message
 
     def initialize(token_attrs, merchant_id:, verification_keys:)
@@ -54,10 +56,6 @@ module R2D2
     end
 
     class << self
-      def derive_hkdf_keys(ephemeral_public_key, shared_secret, info = 'Google')
-        super
-      end
-
       def to_length_value(*chunks)
         chunks.flat_map do |chunk|
           chunk_size = 4.times.map do |index|

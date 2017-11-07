@@ -10,6 +10,8 @@ module R2D2
     Error = Class.new(StandardError)
     TagVerificationError = Class.new(PaymentToken::Error)
 
+    HKDF_INFO = 'Android'
+
     def initialize(token_attrs)
       self.ephemeral_public_key = token_attrs["ephemeralPublicKey"]
       self.tag = token_attrs["tag"]
@@ -41,9 +43,9 @@ module R2D2
         private_key.dh_compute_key(point)
       end
 
-      def derive_hkdf_keys(ephemeral_public_key, shared_secret, info = 'Android')
+      def derive_hkdf_keys(ephemeral_public_key, shared_secret)
         key_material = Base64.decode64(ephemeral_public_key) + shared_secret
-        hkdf = HKDF.new(key_material, :algorithm => 'SHA256', :info => info)
+        hkdf = HKDF.new(key_material, :algorithm => 'SHA256', :info => self::HKDF_INFO)
         {
           :symmetric_encryption_key => hkdf.next_bytes(16),
           :mac_key => hkdf.next_bytes(16)
