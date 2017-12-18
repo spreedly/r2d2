@@ -8,7 +8,7 @@ class R2D2::PaymentTokenTest < Minitest::Test
     @private_key = File.read(fixtures + "private_key.pem")
     @payment_token = R2D2::PaymentToken.new(@token_attrs)
     @shared_secret = ['44a9715c18ebcb255af705f7332657420aca40604334a7d48a89baba18280a97']
-    @mac_key = ["d"]
+    @mac_key = ["d8976b95c980760d8ce3933994c6eda1"]
     @symmetric_encryption_key = ["c7b2670dc0630edd0a9101dd5d70e4b2"]
   end
 
@@ -36,7 +36,7 @@ class R2D2::PaymentTokenTest < Minitest::Test
   def test_derive_hkdf_keys
     hkdf_keys = R2D2::PaymentToken.derive_hkdf_keys(@payment_token.ephemeral_public_key, @shared_secret[0])
     assert_equal hkdf_keys[:symmetric_encryption_key].unpack('H*'), @symmetric_encryption_key
-    assert_equal hkdf_keys[:mac_key].unpack('*H'), @mac_key
+    assert_equal hkdf_keys[:mac_key].unpack('H*'), @mac_key
   end
 
   def test_invalid_tag

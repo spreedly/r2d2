@@ -42,7 +42,7 @@ module R2D2
       def derive_hkdf_keys(ephemeral_public_key, shared_secret)
         key_material = Base64.decode64(ephemeral_public_key) + shared_secret;
         hkdf = HKDF.new(key_material, :algorithm => 'SHA256', :info => 'Android')
-        hkdf_keys = {
+        {
           :symmetric_encryption_key => hkdf.next_bytes(16),
           :mac_key => hkdf.next_bytes(16)
         }
@@ -58,8 +58,7 @@ module R2D2
         decipher.decrypt
         decipher.key = symmetric_key
         decipher.auth_data = ""
-        payload = decipher.update(Base64.decode64(encrypted_data)) + decipher.final
-        payload.unpack('U*').collect { |el| el.chr }.join
+        decipher.update(Base64.decode64(encrypted_data)) + decipher.final
       end
 
       if defined?(FastSecureCompare)
