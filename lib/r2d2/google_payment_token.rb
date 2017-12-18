@@ -5,7 +5,7 @@ module R2D2
 
     HKDF_INFO = 'Google'
 
-    attr_reader :protocol_version, :merchant_id, :verification_keys, :signature, :signed_message
+    attr_reader :protocol_version, :recipient_id, :verification_keys, :signature, :signed_message
 
     def self.to_length_value(*chunks)
       chunks.flat_map do |chunk|
@@ -16,11 +16,11 @@ module R2D2
       end.join
     end
 
-    def initialize(token_attrs, merchant_id:, verification_keys:)
+    def initialize(token_attrs, recipient_id:, verification_keys:)
       @protocol_version = token_attrs['protocolVersion']
       raise ArgumentError, "unknown protocolVersion #{protocol_version}" unless protocol_version == 'ECv1'
 
-      @merchant_id = merchant_id
+      @recipient_id = recipient_id
       @verification_keys = verification_keys
       @signature = token_attrs['signature']
       @signed_message = token_attrs['signedMessage']
@@ -46,7 +46,7 @@ module R2D2
       digest = OpenSSL::Digest::SHA256.new
       signed_bytes = self.class.to_length_value(
         'Google',
-        "merchant:#{merchant_id}",
+        recipient_id,
         protocol_version,
         signed_message
       )

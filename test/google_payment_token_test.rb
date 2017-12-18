@@ -3,7 +3,7 @@ require "test_helper"
 class R2D2::GooglePaymentTokenTest < Minitest::Test
 
   def setup
-    @merchant_id = '12345678901234567890'
+    @recipient_id = 'merchant:12345678901234567890'
     @fixtures = File.dirname(__FILE__) + "/fixtures/google/"
     @token = JSON.parse(File.read(@fixtures + "tokenized_card.json"))
     @private_key = File.read(@fixtures + "private_key.pem")
@@ -92,7 +92,7 @@ class R2D2::GooglePaymentTokenTest < Minitest::Test
   def payment_token
     R2D2::GooglePaymentToken.new(
       @token,
-      merchant_id: @merchant_id,
+      recipient_id: @recipient_id,
       verification_keys: @verification_keys
     )
   end
