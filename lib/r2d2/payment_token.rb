@@ -60,8 +60,7 @@ module R2D2
         decipher.decrypt
         decipher.key = symmetric_key
         decipher.auth_data = ""
-        payload = decipher.update(Base64.decode64(encrypted_data)) + decipher.final
-        payload.unpack('U*').collect { |el| el.chr }.join
+        decipher.update(Base64.decode64(encrypted_data)) + decipher.final
       end
 
       if defined?(FastSecureCompare)
