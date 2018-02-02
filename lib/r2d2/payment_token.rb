@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'openssl'
 require 'base64'
 require 'hkdf'
@@ -8,6 +9,7 @@ module R2D2
     attr_accessor :encrypted_message, :ephemeral_public_key, :tag
 
     class TagVerificationError < StandardError; end;
+    SALT = "\x00" * 32
 
     def initialize(token_attrs)
       self.ephemeral_public_key = token_attrs["ephemeralPublicKey"]
@@ -40,11 +42,11 @@ module R2D2
       end
 
       def derive_hkdf_keys(ephemeral_public_key, shared_secret)
-        key_material = Base64.decode64(ephemeral_public_key) + shared_secret;
-        hkdf = HKDF.new(key_material, :algorithm => 'SHA256', :info => 'Android')
-        hkdf_keys = {
-          :symmetric_encryption_key => hkdf.next_bytes(16),
-          :mac_key => hkdf.next_bytes(16)
+        key_material = Base64.decode64(ephemeral_public_key) + shared_secret
+        hkdf = HKDF.new(key_material, algorithm: 'SHA256', info: 'Android', salt: SALT).next_bytes(32)
+        {
+          symmetric_encryption_key: hkdf[0, 16],
+          mac_key: hkdf[16, 16]
         }
       end
 
@@ -58,8 +60,7 @@ module R2D2
         decipher.decrypt
         decipher.key = symmetric_key
         decipher.auth_data = ""
-        payload = decipher.update(Base64.decode64(encrypted_data)) + decipher.final
-        payload.unpack('U*').collect { |el| el.chr }.join
+        decipher.update(Base64.decode64(encrypted_data)) + decipher.final
       end
 
       if defined?(FastSecureCompare)

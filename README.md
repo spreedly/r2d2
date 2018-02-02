@@ -74,7 +74,7 @@ fast secure_compare   0.050000   0.000000   0.050000 (  0.049753)
 ## Testing
 
 ```session
-$ bundle exec ruby test/payment_token_test.rb
+$ bundle exec rake
 ...
 5 tests, 18 assertions, 0 failures, 0 errors, 0 skips
 ```
