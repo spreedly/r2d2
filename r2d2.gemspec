@@ -5,8 +5,8 @@ Gem::Specification.new do |s|
   s.name              = "r2d2"
   s.version           = R2D2::VERSION
   s.platform          = Gem::Platform::RUBY
-  s.authors           = ["Miki Rezentes"]
-  s.email             = ["miki@spreedly.com"]
+  s.authors           = ["Miki Rezentes", "Ryan Daigle"]
+  s.email             = ["mrezentes@gmail.com", "ryan.daigle@gmail.com"]
   s.homepage          = "https://github.com/spreedly/r2d2"
   s.summary           = "Android Pay payment token decryption library"
   s.description       = "Given an (encrypted) Android Pay token, verify and decrypt it"
