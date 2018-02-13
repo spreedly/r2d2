@@ -1,3 +1,6 @@
 vendor/*
 .bundle
 notes.md
+Gemfile.lock
+.ruby-version
+.ruby-gemset
