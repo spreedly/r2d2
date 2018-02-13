@@ -1,9 +1,6 @@
-$LOAD_PATH.push File.expand_path("../lib", __FILE__)
-require 'test/unit'
-require 'json'
-require 'r2d2'
+require "test_helper"
 
-class R2D2::PaymentTokenTest < Test::Unit::TestCase
+class R2D2::PaymentTokenTest < Minitest::Test
 
   def setup
     fixtures = File.dirname(__FILE__) + "/fixtures/"
@@ -44,7 +41,7 @@ class R2D2::PaymentTokenTest < Test::Unit::TestCase
 
   def test_invalid_tag
     @payment_token.tag = "SomethingBogus"
-    assert_raise R2D2::PaymentToken::TagVerificationError do
+    assert_raises R2D2::PaymentToken::TagVerificationError do
       JSON.parse(@payment_token.decrypt( @private_key))
     end
   end
