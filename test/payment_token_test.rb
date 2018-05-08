@@ -19,7 +19,7 @@ class R2D2::PaymentTokenTest < Minitest::Test
   end
 
   def test_successful_decrypt
-    payment_data = JSON.parse(@payment_token.decrypt( @private_key))
+    payment_data = @payment_token.decrypt( @private_key)
     assert_equal "4895370012003478", payment_data["dpan"]
     assert_equal 12, payment_data["expirationMonth"]
     assert_equal 2020, payment_data["expirationYear"]
@@ -42,7 +42,7 @@ class R2D2::PaymentTokenTest < Minitest::Test
   def test_invalid_tag
     @payment_token.tag = "SomethingBogus"
     assert_raises R2D2::PaymentToken::TagVerificationError do
-      JSON.parse(@payment_token.decrypt( @private_key))
+      @payment_token.decrypt( @private_key)
     end
   end
 
