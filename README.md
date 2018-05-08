@@ -85,6 +85,36 @@ $ bundle exec rake
 5 tests, 18 assertions, 0 failures, 0 errors, 0 skips
 ```
 
+## Releasing
+
+To cut a new gem:
+
+### Setup RubyGems account
+
+Make sure you have a [RubyGems account](https://rubygems.org) and have setup your local gem credentials with something like this:
+
+```bash
+$ curl -u rwdaigle https://rubygems.org/api/v1/api_key.yaml > ~/.gem/credentials; chmod 0600 ~/.gem/credentials
+<enter rubygems account password>
+```
+
+If you are not yet listed as a gem owner, you will need to [request access](http://guides.rubygems.org/command-reference/#gem-owner) from @rwdaigle.
+
+### Release
+
+Build and release the gem with (all changes should be committed and pushed to Github):
+
+```bash
+$ rake release
+```
+
+## Changelog
+
+### v0.1.2
+
+* Setup CircleCI for more exhaustive Ruby version compatibility tests
+* Add gem release instructions
+
 ## Contributors
 
 * [methodmissing](https://github.com/methodmissing)
