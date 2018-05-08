@@ -1,6 +1,12 @@
 # R2D2
 
+[![CircleCI](https://circleci.com/gh/spreedly/r2d2.svg?style=svg)](https://circleci.com/gh/spreedly/r2d2)
+
 R2D2 is a Ruby library for decrypting Android Pay payment tokens.
+
+## Ruby support
+
+Currently, only Ruby v2.2 and below are supported. For Ruby >= 2.3, work will need to be done (similar to [what was done in Gala](https://github.com/spreedly/gala/commit/0a4359ccdd5654b78747f9141645ca510ee255c2)) to use a compatible aead decryption algorithm.
 
 ## Install
 
