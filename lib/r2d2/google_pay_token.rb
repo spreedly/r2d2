@@ -17,12 +17,11 @@ module R2D2
     def decrypt(private_key_pem)
       verified = verify_and_parse_message
 
-      digest = OpenSSL::Digest.new('sha256')
       private_key = OpenSSL::PKey::EC.new(private_key_pem)
       shared_secret = generate_shared_secret(private_key, verified['ephemeralPublicKey'])
       hkdf_keys = derive_hkdf_keys(verified['ephemeralPublicKey'], shared_secret, 'Google')
 
-      verify_mac(digest, hkdf_keys[:mac_key], verified['encryptedMessage'], verified['tag'])
+      verify_mac(hkdf_keys[:mac_key], verified['encryptedMessage'], verified['tag'])
       decrypted = JSON.parse(
         decrypt_message(verified['encryptedMessage'], hkdf_keys[:symmetric_encryption_key])
       )

@@ -11,7 +11,6 @@ module R2D2
     end
 
     def decrypt(private_key_pem)
-      digest = OpenSSL::Digest.new('sha256')
       private_key = OpenSSL::PKey::EC.new(private_key_pem)
 
       shared_secret = generate_shared_secret(private_key, ephemeral_public_key)
@@ -20,7 +19,7 @@ module R2D2
       hkdf_keys = derive_hkdf_keys(ephemeral_public_key, shared_secret, 'Android')
 
       # verify the tag is a valid value
-      verify_mac(digest, hkdf_keys[:mac_key], encrypted_message, tag)
+      verify_mac(hkdf_keys[:mac_key], encrypted_message, tag)
 
       JSON.parse(decrypt_message(encrypted_message, hkdf_keys[:symmetric_encryption_key]))
     end
