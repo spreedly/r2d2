@@ -6,8 +6,6 @@ module R2D2
 
     def initialize(token_attrs, recipient_id:, verification_keys:)
       @protocol_version = token_attrs['protocolVersion']
-      raise ArgumentError, "unknown protocolVersion #{protocol_version}" unless protocol_version == 'ECv1'
-
       @recipient_id = recipient_id
       @verification_keys = verification_keys
       @signature = token_attrs['signature']
