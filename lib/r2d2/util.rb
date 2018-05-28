@@ -31,10 +31,10 @@ module R2D2
 
     def derive_hkdf_keys(ephemeral_public_key, shared_secret, info)
       key_material = Base64.decode64(ephemeral_public_key) + shared_secret
-      hkdf = HKDF.new(key_material, algorithm: 'SHA256', info: info)
+      hkdf_bytes = hkdf(key_material, info)
       {
-        symmetric_encryption_key: hkdf.next_bytes(16),
-        mac_key: hkdf.next_bytes(16)
+        symmetric_encryption_key: hkdf_bytes[0..15],
+        mac_key: hkdf_bytes[16..32]
       }
     end
 
@@ -79,6 +79,25 @@ module R2D2
         res = 0
         b.each_byte { |byte| res |= byte ^ l.shift }
         res == 0
+      end
+    end
+
+    if defined?(OpenSSL::KDF) && OpenSSL::KDF.respond_to?(:hkdf)
+      def hkdf(key_material, info)
+        OpenSSL::KDF.hkdf(key_material, salt: 0.chr * 32, info: info, length: 32, hash: 'sha256')
+      end
+    else
+      begin
+        require 'hkdf'
+      rescue LoadError
+        STDERR.puts "You need at least Ruby OpenSSL gem 2.1 (installed: #{OpenSSL::VERSION}) " \
+        "and system OpenSSL 1.1.0 (installed: #{OpenSSL::OPENSSL_LIBRARY_VERSION}) for HKDF support." \
+        "You can add \"gem 'hkdf'\" to your Gemfile for a Ruby-based fallback."
+        raise
+      end
+
+      def hkdf(key_material, info)
+        HKDF.new(key_material, algorithm: 'SHA256', info: info).next_bytes(32)
       end
     end
   end
