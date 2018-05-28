@@ -1,11 +1,11 @@
 require "test_helper"
 
-class R2D2::PaymentTokenTest < Minitest::Test
+class R2D2::AndroidPayTokenTest < Minitest::Test
   def setup
     fixtures = File.dirname(__FILE__) + "/fixtures/"
     @token_attrs = JSON.parse(File.read(fixtures + "token.json"))
     @private_key = File.read(fixtures + "private_key.pem")
-    @payment_token = R2D2::PaymentToken.new(@token_attrs)
+    @payment_token = R2D2::AndroidPayToken.new(@token_attrs)
   end
 
   def test_initialize
@@ -15,7 +15,7 @@ class R2D2::PaymentTokenTest < Minitest::Test
   end
 
   def test_successful_decrypt
-    payment_data = JSON.parse(@payment_token.decrypt(@private_key))
+    payment_data = @payment_token.decrypt(@private_key)
     assert_equal "4895370012003478", payment_data["dpan"]
     assert_equal 12, payment_data["expirationMonth"]
     assert_equal 2020, payment_data["expirationYear"]
@@ -27,7 +27,7 @@ class R2D2::PaymentTokenTest < Minitest::Test
   def test_invalid_tag
     @payment_token.tag = "SomethingBogus"
     assert_raises R2D2::TagVerificationError do
-      JSON.parse(@payment_token.decrypt(@private_key))
+      @payment_token.decrypt(@private_key)
     end
   end
 end

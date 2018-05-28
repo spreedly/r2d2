@@ -1,6 +1,8 @@
 module R2D2
   Error = Class.new(StandardError)
   TagVerificationError = Class.new(R2D2::Error)
+  SignatureInvalidError = Class.new(R2D2::Error)
+  MessageExpiredError = Class.new(R2D2::Error)
 
   module Util
     def generate_shared_secret(private_key, ephemeral_public_key)
@@ -10,9 +12,9 @@ module R2D2
       private_key.dh_compute_key(point)
     end
 
-    def derive_hkdf_keys(ephemeral_public_key, shared_secret)
+    def derive_hkdf_keys(ephemeral_public_key, shared_secret, info)
       key_material = Base64.decode64(ephemeral_public_key) + shared_secret
-      hkdf = HKDF.new(key_material, algorithm: 'SHA256', info: 'Android')
+      hkdf = HKDF.new(key_material, algorithm: 'SHA256', info: info)
       {
         symmetric_encryption_key: hkdf.next_bytes(16),
         mac_key: hkdf.next_bytes(16)
@@ -29,6 +31,18 @@ module R2D2
       decipher.decrypt
       decipher.key = symmetric_key
       decipher.update(Base64.decode64(encrypted_data)) + decipher.final
+    end
+
+    def to_length_value(*chunks)
+      value = ''
+      chunks.each do |chunk|
+        chunk_size = 4.times.map do |index|
+          (chunk.bytesize >> (8 * index)) & 0xFF
+        end
+        value << chunk_size.pack('C*')
+        value << chunk
+      end
+      value
     end
 
     private
