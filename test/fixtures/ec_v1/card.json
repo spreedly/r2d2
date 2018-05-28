@@ -1,0 +1,5 @@
+{
+  "signature": "MEUCIQDeIvCbFje6fFQe0lFUD8oV6T3GY81dU9UJ6KeXlwKSJgIgamgC56BdcNEJgffQDW3bTFWmEQVoC6zUZ+J7xJp2WAg\u003d",
+  "protocolVersion": "ECv1",
+  "signedMessage": "{\"encryptedMessage\":\"ilnxpVEEaaZ2GFSc7cQDNxSMkjF5nWFcT6w3HSdpX+5mXn/uv6naeTjSoGfy1gi6JdpToKuc0hhkqpetNVDj6dPH8u01K685xEL0AVjuSR84WnRfxnWjDNlYRuGS0N5iPY6G/981ucbgwBNcAjqemTdc6xv6/lQwZq36V7FWt4IAchg55JJt2mnFMSDkkMTz5bWfJtgmwg55b0KXfuTA3ADLxeFlOLuT3DICFzo45jyCK1RSltiCHhD+Lm65wESCHCgS9W50yh2a/J1lTCUP7Xy/aaurVtNUrB+H/SlY16Szk455h27d2Zi6JKzxnL/rQ+5ME1TWpp0n66RQ70y1roC5myNy6ILmEoyIdAU6FahuGX4MQFkmO4G4GOL5lMEj63hF1U2N/iFm03Urx2dSWkCsiVM\\u003d\",\"ephemeralPublicKey\":\"BEENTno093zpl+QST4mXKVqrOVHsqweffqILO+HAob2JyF8YNtjBWXoKunSF0rkGY3spzp/BsNHKJ3Req+DfOwM\\u003d\",\"tag\":\"eZJ0p0DUu9TGM3bOx8VBCcgt9sJ9tgLRnLjgPyd4aKs\\u003d\"}"
+}

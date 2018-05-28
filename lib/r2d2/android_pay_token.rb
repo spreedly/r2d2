@@ -1,5 +1,5 @@
 module R2D2
-  class PaymentToken
+  class AndroidPayToken
     include Util
 
     attr_accessor :encrypted_message, :ephemeral_public_key, :tag
@@ -17,12 +17,12 @@ module R2D2
       shared_secret = generate_shared_secret(private_key, ephemeral_public_key)
 
       # derive the symmetric_encryption_key and mac_key
-      hkdf_keys = derive_hkdf_keys(ephemeral_public_key, shared_secret)
+      hkdf_keys = derive_hkdf_keys(ephemeral_public_key, shared_secret, 'Android')
 
       # verify the tag is a valid value
       verify_mac(digest, hkdf_keys[:mac_key], encrypted_message, tag)
 
-      decrypt_message(encrypted_message, hkdf_keys[:symmetric_encryption_key])
+      JSON.parse(decrypt_message(encrypted_message, hkdf_keys[:symmetric_encryption_key]))
     end
   end
 end

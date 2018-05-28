@@ -4,4 +4,5 @@ require 'base64'
 require 'hkdf'
 
 require_relative "r2d2/util"
-require_relative "r2d2/payment_token"
+require_relative "r2d2/android_pay_token"
+require_relative "r2d2/google_pay_token"
