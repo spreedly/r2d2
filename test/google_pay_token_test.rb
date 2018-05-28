@@ -15,14 +15,6 @@ module R2D2
       Timecop.return
     end
 
-    def test_initialize_unknown_protocol_version
-      @token['protocolVersion'] = 'foo'
-
-      assert_raises ArgumentError, 'unknown protocolVersion foo' do
-        new_token
-      end
-    end
-
     def test_decrypted_tokenized_card
       expected = {
         "messageExpiration" => "1510318759535",

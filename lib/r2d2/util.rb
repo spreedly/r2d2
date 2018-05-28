@@ -4,6 +4,23 @@ module R2D2
   SignatureInvalidError = Class.new(R2D2::Error)
   MessageExpiredError = Class.new(R2D2::Error)
 
+  def build_token(token_attrs, recipient_id: nil, verification_keys: nil)
+    protocol_version = token_attrs.fetch('protocolVersion', 'ECv0')
+
+    case protocol_version
+    when 'ECv0'
+      AndroidPayToken.new(token_attrs)
+    when 'ECv1'
+      raise ArgumentError, "missing keyword: recipient_id" if recipient_id.nil?
+      raise ArgumentError, "missing keyword: verification_keys" if verification_keys.nil?
+
+      GooglePayToken.new(token_attrs, recipient_id: recipient_id, verification_keys: verification_keys)
+    else
+      raise ArgumentError, "unknown protocolVersion #{protocol_version}"
+    end
+  end
+  module_function :build_token
+
   module Util
     def generate_shared_secret(private_key, ephemeral_public_key)
       ec = OpenSSL::PKey::EC.new('prime256v1')
