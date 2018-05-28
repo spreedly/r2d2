@@ -21,7 +21,8 @@ module R2D2
       }
     end
 
-    def verify_mac(digest, mac_key, encrypted_message, tag)
+    def verify_mac(mac_key, encrypted_message, tag)
+      digest = OpenSSL::Digest.new('sha256')
       mac = OpenSSL::HMAC.digest(digest, mac_key, Base64.decode64(encrypted_message))
       raise TagVerificationError unless secure_compare(mac, Base64.decode64(tag))
     end
