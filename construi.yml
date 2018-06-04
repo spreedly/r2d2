@@ -1,0 +1,34 @@
+image: scratch
+
+environment:
+  - BUNDLE_APP_CONFIG=$PWD/.bundle
+  - BUNDLE_APP_PATH=$PWD/.bundle
+  - HOME=$PWD
+
+targets:
+  test-ruby18:
+    image: everydayhero/ruby-ree
+    run: &run-tests
+      - bundle config path vendor/bundle
+      - bundle update
+      - bundle exec rake
+
+  test-ruby19:
+    image: ruby:1.9
+    run: *run-tests
+
+  test-ruby21:
+    image: ruby:2.1
+    run: *run-tests
+
+  test-ruby22:
+    image: ruby:2.2
+    run: *run-tests
+
+  test:
+    before:
+      - test-ruby18
+      - test-ruby19
+      - test-ruby21
+      - test-ruby22
+

@@ -20,8 +20,9 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'hkdf'
 
-  s.add_development_dependency "bundler", "~> 1.15"
-  s.add_development_dependency "rake", "~> 12.0"
+  s.add_development_dependency "bundler", "~> 1.9"
+  s.add_development_dependency "rake", "~> 10.5"
   s.add_development_dependency "minitest", "~> 5.0"
-  s.add_development_dependency "pry-byebug"
+
+  s.add_development_dependency "pry-byebug" if RUBY_VERSION > '2.2.0'
 end

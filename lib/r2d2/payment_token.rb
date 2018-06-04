@@ -57,7 +57,6 @@ module R2D2
         decipher = OpenSSL::Cipher::AES128.new(:CTR)
         decipher.decrypt
         decipher.key = symmetric_key
-        decipher.auth_data = ""
         decipher.update(Base64.decode64(encrypted_data)) + decipher.final
       end
 
