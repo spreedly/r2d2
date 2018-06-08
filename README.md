@@ -31,7 +31,7 @@ Example Google Pay token values:
 }
 ```
 
-The `recipient_id` will be in the form `gateway:processorname`. 
+The `recipient_id` will be given to you by Google. Example: `merchant:12345678901234567890`. 
 
 The `verificiation_keys` are available in Google's developer docs. Example:
 
