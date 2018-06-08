@@ -18,8 +18,8 @@ gem 'r2d2', git: 'https://github.com/spreedly/r2d2.git'
 
 ## Google Pay Usage
 
-For Google Pay, R2D2 requires the token values in the form of a JSON hash, your `recipient_id`, Google's `verification_keys`, 
-and your private key.
+For Google Pay, R2D2 requires the token values in the form of a JSON hash, your `recipient_id`, Google's `verification_keys` 
+for the appropriate environment, and your private key.
 
 Example Google Pay token values:
 
@@ -33,15 +33,26 @@ Example Google Pay token values:
 
 The `recipient_id` will be given to you by Google. Example: `merchant:12345678901234567890`. 
 
-The `verificiation_keys` are available in Google's developer docs. Example:
+The `verification_keys` must be fetched from Google's servers for the appropriate environment:
+- production: https://payments.developers.google.com/paymentmethodtoken/keys.json
+- test: https://payments.developers.google.com/paymentmethodtoken/test/keys.json
 
-```json
-{ "keys":
-  [
-    { "keyValue":"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEIsFro6K+IUxRr4yFTOTO+kFCCEvHo7B9IOMLxah6c977oFzX\/beObH4a9OfosMHmft3JJZ6B3xpjIb8kduK4\/A==",
-      "protocolVersion":"ECv1"
-    }
-  ]
+It's a good idea to cache these keys for performance and resiliency. The `Cache-Control: max-age` directive must be 
+respected to expire the cache. To prevent decryption failures by expiring caches, it's recommended by Google's 
+[Tink](https://github.com/google/tink) reference library to pro-actively refresh the cache after half of the `max-age` 
+duration has passed.
+ 
+The JSON must be parsed into a Ruby hash before being passed to R2D2. Example:
+
+```ruby
+{
+  "keys" =>
+    [
+      {
+        "keyValue" => "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEIsFro6K+IUxRr4yFTOTO+kFCCEvHo7B9IOMLxah6c977oFzX/beObH4a9OfosMHmft3JJZ6B3xpjIb8kduK4/A==", 
+        "protocolVersion" => "ECv1"
+      }
+    ]
 }
 ```
 
