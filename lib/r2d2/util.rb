@@ -33,8 +33,8 @@ module R2D2
       key_material = Base64.decode64(ephemeral_public_key) + shared_secret
       hkdf_bytes = hkdf(key_material, info)
       {
-        symmetric_encryption_key: hkdf_bytes[0..15],
-        mac_key: hkdf_bytes[16..32]
+        symmetric_encryption_key: hkdf_bytes[0..31],
+        mac_key: hkdf_bytes[32..64]
       }
     end
 
@@ -45,7 +45,7 @@ module R2D2
     end
 
     def decrypt_message(encrypted_data, symmetric_key)
-      decipher = OpenSSL::Cipher::AES128.new(:CTR)
+      decipher = OpenSSL::Cipher::AES256.new(:CTR)
       decipher.decrypt
       decipher.key = symmetric_key
       decipher.update(Base64.decode64(encrypted_data)) + decipher.final
@@ -84,7 +84,7 @@ module R2D2
 
     if defined?(OpenSSL::KDF) && OpenSSL::KDF.respond_to?(:hkdf)
       def hkdf(key_material, info)
-        OpenSSL::KDF.hkdf(key_material, salt: 0.chr * 32, info: info, length: 32, hash: 'sha256')
+        OpenSSL::KDF.hkdf(key_material, salt: 0.chr * 32, info: info, length: 64, hash: 'sha256')
       end
     else
       begin
