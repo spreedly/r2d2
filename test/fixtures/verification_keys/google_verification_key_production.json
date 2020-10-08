@@ -1,0 +1,18 @@
+{
+  "keys": [
+    {
+      "keyValue": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAENnoaYTAh15xpR65XRw7jHYj7vNUIGu5I4OmLCrORWwdjrcrED+bJo+nF2HyA5hnH12Dqt1bR8mqKBXynG3HBNw==",
+      "protocolVersion": "ECv1"
+    },
+    {
+      "keyValue": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAElLiHStI30O9lVplgRhBN1AdlQdWyYgjQAcK3vgrqTvxs9WFkLs7CrxGge79+N5AHlklIHwlKu4WKv8E5IFX8DA==",
+      "protocolVersion": "ECv2",
+      "keyExpiration": "2154841200000"
+    },
+    {
+      "keyValue": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAElLiHStI30O9lVplgRhBN1AdlQdWyYgjQAcK3vgrqTvxs9WFkLs7CrxGge79+N5AHlklIHwlKu4WKv8E5IFX8DA==",
+      "protocolVersion": "ECv2SigningOnly",
+      "keyExpiration": "2154841200000"
+    }
+  ]
+}

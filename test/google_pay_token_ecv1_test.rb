@@ -4,10 +4,10 @@ module R2D2
   class GooglePayTokenTest < Minitest::Test
     def setup
       @recipient_id = 'merchant:12345678901234567890'
-      @fixtures = __dir__ + "/fixtures/ec_v1/"
-      @token = JSON.parse(File.read(@fixtures + "tokenized_card.json"))
-      @private_key = File.read(@fixtures + "private_key.pem")
-      @verification_keys = JSON.parse(File.read(@fixtures + "google_verification_key_test.json"))
+      @fixtures = __dir__ + "/fixtures/"
+      @token = JSON.parse(File.read(@fixtures + "ec_v1/tokenized_card.json"))
+      @private_key = File.read(@fixtures + "google_pay_token_private_key.pem")
+      @verification_keys = JSON.parse(File.read(@fixtures + "verification_keys/google_verification_key_test.json"))
       Timecop.freeze(Time.at(1509713963))
     end
 
@@ -36,7 +36,7 @@ module R2D2
     end
 
     def test_decrypted_card
-      @token = JSON.parse(File.read(@fixtures + 'card.json'))
+      @token = JSON.parse(File.read(@fixtures + 'ec_v1/card.json'))
       expected = {
         "messageExpiration" => "1510319499834",
         "paymentMethod" => "CARD",
@@ -62,7 +62,7 @@ module R2D2
     end
 
     def test_wrong_verification_key
-      @verification_keys = JSON.parse(File.read(@fixtures + "google_verification_key_production.json"))
+      @verification_keys = JSON.parse(File.read(@fixtures + "verification_keys/google_verification_key_production.json"))
 
       assert_raises R2D2::SignatureInvalidError do
         new_token.decrypt(@private_key)
@@ -70,7 +70,7 @@ module R2D2
     end
 
     def test_unknown_verification_key_version
-      @verification_keys['keys'][0]['protocolVersion'] = 'foo'
+      @verification_keys = JSON.parse(File.read(@fixtures + "verification_keys/bad_google_verification_key_test.json"))
 
       assert_raises R2D2::SignatureInvalidError do
         new_token.decrypt(@private_key)
@@ -78,7 +78,7 @@ module R2D2
     end
 
     def test_multiple_verification_keys
-      production_keys = JSON.parse(File.read(@fixtures + "google_verification_key_production.json"))['keys']
+      production_keys = JSON.parse(File.read(@fixtures + "verification_keys/google_verification_key_production.json"))['keys']
       @verification_keys = { 'keys' => production_keys + @verification_keys['keys'] }
 
       assert new_token.decrypt(@private_key)
