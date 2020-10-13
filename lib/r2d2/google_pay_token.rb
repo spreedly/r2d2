@@ -4,6 +4,8 @@ module R2D2
 
     attr_reader :protocol_version, :recipient_id, :raw_verification_keys, :signature, :signed_message, :intermediate_signing_key
 
+    SENDER_ID = 'Google'
+
     def initialize(token_attrs, recipient_id:, verification_keys:)
       @protocol_version = token_attrs['protocolVersion']
       @recipient_id = recipient_id
@@ -22,7 +24,7 @@ module R2D2
       shared_secret = generate_shared_secret(private_key, verified['ephemeralPublicKey'])
 
       hkdf_keys_length_bytes = protocol_version == 'ECv2' ? 32 : 16
-      hkdf_keys = derive_hkdf_keys(verified['ephemeralPublicKey'], shared_secret, 'Google', hkdf_keys_length_bytes)
+      hkdf_keys = derive_hkdf_keys(verified['ephemeralPublicKey'], shared_secret, SENDER_ID, hkdf_keys_length_bytes)
       verify_mac(hkdf_keys[:mac_key], verified['encryptedMessage'], verified['tag'])
 
       cipher_key_length_bits = protocol_version == 'ECv2' ? 256 : 128
@@ -30,8 +32,7 @@ module R2D2
         decrypt_message(verified['encryptedMessage'], hkdf_keys[:symmetric_encryption_key], cipher_key_length_bits)
       )
 
-      cur_millis = (Time.now.to_f * 1000).floor
-      expired = decrypted['messageExpiration'].to_i <= cur_millis
+      expired = decrypted['messageExpiration'].to_i <= current_time_ms
 
       raise MessageExpiredError if expired
 
@@ -53,7 +54,7 @@ module R2D2
 
     def verify_and_parse_message_ecv1
       signed_bytes = to_length_value(
-        'Google',
+        SENDER_ID,
         recipient_id,
         protocol_version,
         signed_message
@@ -80,7 +81,7 @@ module R2D2
     ### ECv2 Methods ###
     def intermediate_key_signature_verified?
       intermediate_signatures = intermediate_signing_key['signatures']
-      signed_bytes = [sender_id, protocol_version, intermediate_signing_key['signedKey']].map do |str|
+      signed_bytes = [SENDER_ID, protocol_version, intermediate_signing_key['signedKey']].map do |str|
         [str.length].pack('V') + str
       end.join
 
@@ -93,7 +94,7 @@ module R2D2
     end
 
     def payload_signature_verified?
-      signed_string_message = [sender_id, ecv2_recipient_id, protocol_version, signed_message].map do |str|
+      signed_string_message = [SENDER_ID, ecv2_recipient_id, protocol_version, signed_message].map do |str|
         [str.length].pack('V') + str
       end.join
 
@@ -108,7 +109,7 @@ module R2D2
 
     def valid_key_signatures?(signing_keys, signatures, signed)
       signing_keys.product(signatures).any? do |key, sig|
-        key.verify(OpenSSL::Digest::SHA256.new, Base64.strict_decode64(sig), signed)
+        key.verify(OpenSSL::Digest.new('SHA256'), Base64.strict_decode64(sig), signed)
       end
     end
 
@@ -125,8 +126,7 @@ module R2D2
     end
 
     def intermediate_key_expired?
-      cur_millis = (Time.now.to_f * 1000).floor
-      intermediate_signing_key_signed_key['keyExpiration'].to_i <= cur_millis
+      intermediate_signing_key_signed_key['keyExpiration'].to_i <= current_time_ms
     end
 
     def intermediate_signing_key_signed_key
@@ -137,8 +137,8 @@ module R2D2
       "merchant:#{recipient_id}"
     end
 
-    def sender_id
-      'Google'
+    def current_time_ms
+      (Time.now.to_f * 1000).floor
     end
   end
 end

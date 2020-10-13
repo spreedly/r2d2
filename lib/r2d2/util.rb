@@ -48,7 +48,7 @@ module R2D2
     def decrypt_message(encrypted_data, symmetric_key, cipher_key_length_bits = 128)
       raise ArgumentError, "Invalid cipher_key_length #{cipher_key_length_bits} must be 128 or 256" unless [128, 256].include?(cipher_key_length_bits)
 
-      decipher = cipher_key_length_bits == 256 ? OpenSSL::Cipher::AES256.new(:CTR) : OpenSSL::Cipher::AES128.new(:CTR)
+      decipher = OpenSSL::Cipher.new("aes-#{cipher_key_length_bits}-ctr")
       decipher.decrypt
       decipher.key = symmetric_key
       decipher.update(Base64.decode64(encrypted_data)) + decipher.final
@@ -86,7 +86,7 @@ module R2D2
     end
 
     if defined?(OpenSSL::KDF) && OpenSSL::KDF.respond_to?(:hkdf)
-      def hkdf(key_material, info, length = 32)
+      def hkdf(key_material, info, length)
         OpenSSL::KDF.hkdf(key_material, salt: 0.chr * 32, info: info, length: length, hash: 'sha256')
       end
     else
@@ -99,7 +99,7 @@ module R2D2
         raise
       end
 
-      def hkdf(key_material, info, length = 32)
+      def hkdf(key_material, info, length)
         HKDF.new(key_material, algorithm: 'SHA256', info: info).next_bytes(length)
       end
     end
