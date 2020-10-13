@@ -1,0 +1,18 @@
+{
+  "keys": [
+    {
+      "keyValue": "nope",
+      "protocolVersion": "foo"
+    },
+    {
+      "keyValue": "not today",
+      "protocolVersion": "bar",
+      "keyExpiration": "2154841200000"
+    },
+    {
+      "keyValue": "and never again",
+      "protocolVersion": "baz",
+      "keyExpiration": "2154841200000"
+    }
+  ]
+}
