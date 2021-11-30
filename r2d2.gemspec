@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage          = "https://github.com/spreedly/r2d2"
   s.summary           = "Android Pay payment token decryption library"
   s.description       = "Given an (encrypted) Android Pay token, verify and decrypt it"
+  s.license           = "MIT"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
